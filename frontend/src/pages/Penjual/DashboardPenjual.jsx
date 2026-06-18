@@ -2,6 +2,8 @@ import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import './DashboardPenjual.css';
 
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+
 const DashboardPenjual = ({ user }) => {
   const [katalogMenu, setKatalogMenu] = useState([]); 
   const [filterKategori, setFilterKategori] = useState('Semua');
@@ -31,7 +33,7 @@ const DashboardPenjual = ({ user }) => {
   // PERBAIKAN: Membungkus fungsi dengan useCallback dan menambahkan dependensi ID Penjual
   const fetchMenu = useCallback(async () => {
     try {
-      const res = await axios.get(`http://127.0.0.1:5000/api/menu?id_penjual=${userFromStorage.id}`, getTokenConfig());
+      const res = await axios.get(`${API_URL}/api/menu?id_penjual=${userFromStorage.id}`, getTokenConfig());
       setKatalogMenu(res.data);
     } catch (err) {
       console.error("Gagal mengambil menu:", err);
@@ -69,13 +71,13 @@ const DashboardPenjual = ({ user }) => {
     e.preventDefault();
     try {
       if (editMode) {
-        const res = await axios.put(`http://127.0.0.1:5000/api/menu/${formData.id}`, formData, getTokenConfig());
+        const res = await axios.put(`${API_URL}/api/menu/${formData.id}`, formData, getTokenConfig());
         if (res.data.success) {
           alert('Menu diperbarui!');
           fetchMenu(); 
         }
       } else {
-        const res = await axios.post('http://127.0.0.1:5000/api/menu', formData, getTokenConfig());
+        const res = await axios.post(`${API_URL}/api/menu`, formData, getTokenConfig());
         if (res.data.success) {
           alert('Menu disimpan!');
           fetchMenu(); 
@@ -91,7 +93,7 @@ const DashboardPenjual = ({ user }) => {
   const handleDeleteMenu = async (id) => {
     if (window.confirm('Hapus menu ini?')) {
       try {
-        const res = await axios.delete(`http://127.0.0.1:5000/api/menu/${id}?id_penjual=${userFromStorage.id}`, getTokenConfig());
+        const res = await axios.delete(`${API_URL}/api/menu/${id}?id_penjual=${userFromStorage.id}`, getTokenConfig());
         if (res.data.success) {
           alert('Menu dihapus!');
           fetchMenu();

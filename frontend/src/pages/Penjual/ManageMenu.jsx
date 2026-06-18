@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './DashboardPenjual.css'; 
 
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+
 const ManageMenu = () => {
   const [menus, setMenus] = useState([]);
   const [filter, setFilter] = useState('Semua');
@@ -20,7 +22,7 @@ const ManageMenu = () => {
   const fetchMenus = async () => {
     if (!userLogin) return; 
     try {
-      const response = await axios.get(`http://localhost:5000/api/menu?id_penjual=${userLogin.id}`);
+      const response = await axios.get(`${API_URL}/api/menu?id_penjual=${userLogin.id}`);
       setMenus(response.data);
     } catch (error) {
       console.error("Gagal mengambil data menu:", error);
@@ -35,7 +37,7 @@ const ManageMenu = () => {
     const confirmDelete = window.confirm("Yakin ingin menghapus menu ini?");
     if (confirmDelete) {
       try {
-        await axios.delete(`http://localhost:5000/api/menu/${id}?id_penjual=${userLogin.id}`);
+        await axios.delete(`${API_URL}/api/menu/${id}?id_penjual=${userLogin.id}`);
         alert("Menu berhasil dihapus!");
         fetchMenus(); 
       } catch (error) {

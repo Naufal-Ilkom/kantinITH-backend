@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+
 const Login = () => {
   const navigate = useNavigate();
   const [username, setUsername] = useState('');
@@ -12,7 +14,7 @@ const Login = () => {
     e.preventDefault();
     
     try {
-      const response = await axios.post('http://127.0.0.1:5000/api/login', {
+      const response = await axios.post(`${API_URL}/api/login`, {
         username: username,
         password: password
       });

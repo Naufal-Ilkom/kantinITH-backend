@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+
 const DaftarPesanan = () => {
   const [pesanan, setPesanan] = useState([]);
 
@@ -12,7 +14,7 @@ const DaftarPesanan = () => {
 
   const ambilPesanan = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/penjual/pesanan');
+      const res = await axios.get(`${API_URL}/api/penjual/pesanan`);
       setPesanan(res.data);
     } catch (err) {
       console.error("Gagal ambil pesanan");
@@ -21,7 +23,7 @@ const DaftarPesanan = () => {
 
   const updateStatus = async (id, statusBaru, items) => {
     try {
-      await axios.patch(`http://localhost:5000/api/pesanan/${id}`, { 
+      await axios.patch(`${API_URL}/api/pesanan/${id}`, { 
         status: statusBaru,
         items: items // Kirim daftar item agar stok bisa dikurangi di backend
       });

@@ -3,6 +3,8 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './MenuDetail.css';
 
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+
 const MenuDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -20,8 +22,8 @@ const MenuDetail = () => {
     try {
       setLoading(true);
       const [resMenu, resReviews] = await Promise.all([
-        axios.get(`http://localhost:5000/api/menu/${id}`, getTokenConfig()),
-        axios.get(`http://localhost:5000/api/menu/${id}/reviews`, getTokenConfig()),
+        axios.get(`${API_URL}/api/menu/${id}`, getTokenConfig()),
+        axios.get(`${API_URL}/api/menu/${id}/reviews`, getTokenConfig()),
       ]);
       setMenu(resMenu.data);
       setReviews(resReviews.data || []);

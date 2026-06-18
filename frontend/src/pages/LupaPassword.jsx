@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+
 const LupaPassword = ({ onGoToLogin }) => {
   const navigate = useNavigate();
   const [step, setStep] = useState(1); // 1: username, 2: token verification, 3: password baru
@@ -37,7 +39,7 @@ const LupaPassword = ({ onGoToLogin }) => {
     setResetToken(''); // Clear token input
 
     try {
-      const response = await axios.post('http://localhost:5000/api/lupa-password', {
+      const response = await axios.post(`${API_URL}/api/lupa-password`, {
         username: username
       });
 
@@ -67,7 +69,7 @@ const LupaPassword = ({ onGoToLogin }) => {
     setIsLoading(true);
     try {
       // 1. Tanya Backend apakah kodenya benar
-      const response = await axios.post('http://localhost:5000/api/verify-reset-token', {
+      const response = await axios.post(`${API_URL}/api/verify-reset-token`, {
         username: username,
         resetToken: resetToken
       });
@@ -102,7 +104,7 @@ const LupaPassword = ({ onGoToLogin }) => {
     setIsLoading(true);
 
     try {
-      const response = await axios.put('http://localhost:5000/api/reset-password', {
+      const response = await axios.put(`${API_URL}/api/reset-password`, {
         username: username,
         resetToken: resetToken,
         passwordBaru: passwordBaru

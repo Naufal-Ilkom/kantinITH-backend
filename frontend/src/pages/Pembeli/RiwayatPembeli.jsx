@@ -3,6 +3,8 @@ import axios from 'axios';
 import ConfirmationModal from '../../components/ConfirmationModal';
 import './RiwayatPembeli.css';
 
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+
 const RiwayatPembeli = () => {
   const [riwayatTransaksi, setRiwayatTransaksi] = useState([]);
   const [activeTab, setActiveTab] = useState('belum-selesai');
@@ -28,7 +30,7 @@ const RiwayatPembeli = () => {
       const token = localStorage.getItem('accessToken');
       const config = { headers: { Authorization: `Bearer ${token}` } };
 
-      const response = await axios.get('http://localhost:5000/api/pesan', config);
+      const response = await axios.get(`${API_URL}/api/pesan`, config);
 
       const dataRiwayat = Array.isArray(response.data) ? response.data : [];
       const riwayatSaya = dataRiwayat.filter(trx => trx.id_pembeli == user.id);
@@ -90,7 +92,7 @@ const RiwayatPembeli = () => {
       const config = { headers: { Authorization: `Bearer ${token}` } };
 
       const response = await axios.post(
-        `http://localhost:5000/api/menu/${selectedOrderForReview.id_menu}/reviews`,
+        `${API_URL}/api/menu/${selectedOrderForReview.id_menu}/reviews`,
         {
           id_pesanan: selectedOrderForReview.id,
           id_pembeli: user.id,
@@ -122,7 +124,7 @@ const RiwayatPembeli = () => {
       const config = { headers: { Authorization: `Bearer ${token}` } };
 
       const response = await axios.put(
-        `http://localhost:5000/api/pesanan/${selectedOrderId}/cancel`,
+        `${API_URL}/api/pesanan/${selectedOrderId}/cancel`,
         {},
         config
       );

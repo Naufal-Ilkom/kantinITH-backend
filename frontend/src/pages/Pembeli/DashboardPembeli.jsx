@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './DashboardPembeli.css';
 
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+
 const DashboardPembeli = ({ userBalance, setUserBalance, user, setUser }) => {
   const navigate = useNavigate();
 
@@ -20,7 +22,7 @@ const DashboardPembeli = ({ userBalance, setUserBalance, user, setUser }) => {
   const fetchUserBalance = async () => {
     if (!user || !user.id) return;
     try {
-      const response = await axios.get(`http://localhost:5000/api/users/${user.id}`, getTokenConfig());
+      const response = await axios.get(`${API_URL}/api/users/${user.id}`, getTokenConfig());
       if (response.data) {
         setUserBalance(response.data.saldo);
         setUser(prevUser => {
@@ -34,7 +36,7 @@ const DashboardPembeli = ({ userBalance, setUserBalance, user, setUser }) => {
 
   const fetchMenu = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/menu', getTokenConfig());
+      const response = await axios.get(`${API_URL}/api/menu`, getTokenConfig());
       setKatalogMenu(response.data);
     } catch (err) { console.error("Gagal mengambil menu:", err); }
   };
@@ -108,7 +110,7 @@ const DashboardPembeli = ({ userBalance, setUserBalance, user, setUser }) => {
     if (cart.length === 0) return;
     const detailString = cart.map(item => `${item.nama_produk} (${item.qty})`).join(", ");
     try {
-      const response = await axios.post('http://localhost:5000/api/pesan', {
+      const response = await axios.post(`${API_URL}/api/pesan`, {
         id_pembeli: user.id,
         total_harga: calculateTotal(),
         detail_pesanan: detailString,

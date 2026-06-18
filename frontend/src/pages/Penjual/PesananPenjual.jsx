@@ -3,6 +3,8 @@ import axios from 'axios';
 import ConfirmationModal from '../../components/ConfirmationModal';
 import './PesananPenjual.css';
 
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+
 const PesananPenjual = () => {
     const [pesanan, setPesanan] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -20,7 +22,7 @@ const PesananPenjual = () => {
             if (!token) return;
 
             const config = { headers: { Authorization: `Bearer ${token}` } };
-            const response = await axios.get('http://localhost:5000/api/penjual/pesanan', config);
+            const response = await axios.get(`${API_URL}/api/penjual/pesanan`, config);
             
             setPesanan(response.data);
             setLoading(false);
@@ -75,13 +77,13 @@ const PesananPenjual = () => {
             let response;
             if (modalAction === 'selesaikan') {
                 response = await axios.patch(
-                    `http://localhost:5000/api/pesanan/${selectedOrderId}`,
+                    `${API_URL}/api/pesanan/${selectedOrderId}`,
                     { status: 'selesai' },
                     config
                 );
             } else if (modalAction === 'tolak') {
                 response = await axios.put(
-                    `http://localhost:5000/api/pesanan/${selectedOrderId}/tolak`,
+                    `${API_URL}/api/pesanan/${selectedOrderId}/tolak`,
                     {},
                     config
                 );
