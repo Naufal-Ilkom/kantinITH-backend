@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './SaldoPembeli.css';
 
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+
 const SaldoPembeli = ({ userBalance, setUserBalance }) => {
   const [topUpAmount, setTopUpAmount]   = useState('');
   const [topupHistory, setTopupHistory] = useState([]);
@@ -34,7 +36,7 @@ const SaldoPembeli = ({ userBalance, setUserBalance }) => {
     try {
       setLoading(true);
       const res = await axios.get(
-        `http://localhost:5000/api/topup-request/user/${user.id}`,
+        `${API_URL}/api/topup-request/user/${user.id}`,
         config
       );
       setTopupHistory(Array.isArray(res.data) ? res.data : []);
@@ -48,7 +50,7 @@ const SaldoPembeli = ({ userBalance, setUserBalance }) => {
   // ── Refresh saldo dari server (Dari Codingan 2) ──
   const refreshSaldo = async () => {
     try {
-      const res = await axios.get(`http://localhost:5000/api/users/${user.id}`, config);
+      const res = await axios.get(`${API_URL}/api/users/${user.id}`, config);
       if (setUserBalance) setUserBalance(res.data.saldo);
       const updated = { ...user, saldo: res.data.saldo };
       localStorage.setItem('user', JSON.stringify(updated));
@@ -72,7 +74,7 @@ const SaldoPembeli = ({ userBalance, setUserBalance }) => {
     try {
       // 1. Minta snapToken dari backend
       const res = await axios.post(
-        'http://localhost:5000/api/topup/create-transaction',
+        `${API_URL}/api/topup/create-transaction`,
         { id_user: user.id, jumlah: nominal },
         config
       );

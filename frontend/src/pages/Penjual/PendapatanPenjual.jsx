@@ -2,6 +2,8 @@ import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import './PendapatanPenjual.css';
 
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+
 const PendapatanPenjual = () => {
     const [saldo, setSaldo] = useState(0);
     const [riwayatPendapatan, setRiwayatPendapatan] = useState([]);
@@ -19,17 +21,17 @@ const PendapatanPenjual = () => {
         const config = { headers: { Authorization: `Bearer ${token}` } };
 
         try {
-            const userRes = await axios.get(`http://localhost:5000/api/users/${user.id}`, config);
+            const userRes = await axios.get(`${API_URL}/api/users/${user.id}`, config);
             setSaldo(userRes.data.saldo);
 
-            const pesananRes = await axios.get('http://localhost:5000/api/penjual/pesanan', config);
+            const pesananRes = await axios.get(`${API_URL}/api/penjual/pesanan`, config);
             const pesananSelesai = pesananRes.data.filter(p => p.status === 'selesai');
             // Urutkan riwayat pendapatan dari yang terbaru
             pesananSelesai.sort((a, b) => b.id - a.id);
             setRiwayatPendapatan(pesananSelesai);
             
             // Fetch withdraw history
-            const withdrawRes = await axios.get(`http://localhost:5000/api/topup-request/user/${user.id}`, config);
+            const withdrawRes = await axios.get(`${API_URL}/api/topup-request/user/${user.id}`, config);
             const withdrawRequests = Array.isArray(withdrawRes.data) 
                 ? withdrawRes.data.filter(req => req.tipe === 'tarik_saldo')
                 : [];
@@ -65,7 +67,7 @@ const PendapatanPenjual = () => {
         const config = { headers: { Authorization: `Bearer ${token}` } };
 
         try {
-            const response = await axios.post('http://localhost:5000/api/topup-request', {
+            const response = await axios.post(`${API_URL}/api/topup-request`, {
                 id_user: user.id,
                 jumlah: nominal,
                 tipe: 'tarik_saldo'

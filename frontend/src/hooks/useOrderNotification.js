@@ -3,6 +3,7 @@
 import { useEffect, useRef, useCallback } from 'react';
 
 const POLL_INTERVAL = 30000; // 30 detik
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
 // Bunyi notifikasi dibuat dari Web Audio API — tidak perlu file audio eksternal
 const playNotificationSound = () => {
@@ -51,7 +52,7 @@ const useOrderNotification = ({ userId, role, onNewOrder }) => {
 
     try {
       const token = localStorage.getItem('accessToken');
-      const response = await fetch('http://localhost:5000/api/penjual/pesanan', {
+      const response = await fetch(`${API_URL}/api/penjual/pesanan`, {
         headers: { Authorization: `Bearer ${token}` }
       });
 
