@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './PenggunaAdmin.css';
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+
 
 const PenggunaAdmin = () => {
   const [pengguna, setPengguna] = useState([]);
@@ -21,7 +23,7 @@ const PenggunaAdmin = () => {
   const fetchUsers = async () => {
     try {
       const token = localStorage.getItem('accessToken');
-      const response = await axios.get('http://localhost:5000/api/admin/users', {
+      const response = await axios.get(`${API_URL}/api/admin/users`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       console.log("Data dari backend:", response.data);
@@ -45,13 +47,13 @@ const PenggunaAdmin = () => {
     try {
       const token = localStorage.getItem('accessToken');
       await axios.patch(
-        `http://localhost:5000/api/admin/users/${selectedUser.id}/saldo`,
+        `${API_URL}/api/admin/users/${selectedUser.id}/saldo`,
         { saldo: Number(newSaldo) },
         { headers: { Authorization: `Bearer ${token}` } }
       );
       if (newStatus !== selectedUser.status) {
         await axios.patch(
-          `http://localhost:5000/api/admin/users/${selectedUser.id}/status`,
+          `${API_URL}/api/admin/users/${selectedUser.id}/status`,
           { status: newStatus },
           { headers: { Authorization: `Bearer ${token}` } }
         );
@@ -70,9 +72,9 @@ const PenggunaAdmin = () => {
   try {
     const token = localStorage.getItem('accessToken');
     // Asumsi kamu nanti membuat endpoint: PATCH /api/admin/users/:id/deactivate
-    await axios.delete(`http://localhost:5000/api/admin/users/${id}`, {
-    headers: { Authorization: `Bearer ${token}` }
-  });
+    await axios.delete(`${API_URL}/api/admin/users/${id}`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
     fetchUsers();
     alert("User berhasil dinonaktifkan!");
   } catch (err) {

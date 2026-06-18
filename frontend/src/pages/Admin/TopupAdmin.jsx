@@ -2,6 +2,8 @@ import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { formatDate } from '../../utils/dateFormatter';
 import './TopupAdmin.css';
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+
 
 const TopupAdmin = () => {
   const [topupRequests, setTopupRequests] = useState([]);
@@ -21,8 +23,8 @@ const TopupAdmin = () => {
     try {
       setLoading(true);
       const url = filterStatus === 'semua'
-        ? 'http://localhost:5000/api/topup-requests'
-        : `http://localhost:5000/api/topup-requests/status/${filterStatus}`;
+        ? `${API_URL}/api/topup-requests`
+        : `${API_URL}/api/topup-requests/status/${filterStatus}`;
       const response = await axios.get(url, config);
       setTopupRequests(Array.isArray(response.data) ? response.data : []);
     } catch (err) {
@@ -43,7 +45,7 @@ const TopupAdmin = () => {
 
   const handleApprove = async (id) => {
     try {
-      await axios.patch(`http://localhost:5000/api/topup-approve/${id}`, { catatan_admin: catatan }, config);
+      await axios.patch(`${API_URL}/api/topup-approve/${id}`, { catatan_admin: catatan }, config);
       alert('Topup berhasil disetujui!');
       closeModal(); 
       fetchTopupRequests();
@@ -54,7 +56,7 @@ const TopupAdmin = () => {
 
   const handleReject = async (id) => {
     try {
-      await axios.patch(`http://localhost:5000/api/topup-reject/${id}`, { catatan_admin: catatan }, config);
+      await axios.patch(`${API_URL}/api/topup-reject/${id}`, { catatan_admin: catatan }, config);
       alert('Topup berhasil ditolak!');
       closeModal(); 
       fetchTopupRequests();

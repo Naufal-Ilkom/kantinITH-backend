@@ -4,6 +4,7 @@ import TransaksiAdmin from './TransaksiAdmin';
 import LaporanAdmin from './LaporanAdmin';
 import TopupAdmin from './TopupAdmin';
 import './DashboardAdmin.css';
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
 const DashboardAdmin = () => {
   const [activeTab, setActiveTab] = useState('pengguna');

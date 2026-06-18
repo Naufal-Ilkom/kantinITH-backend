@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './LaporanAdmin.css';
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
 const LaporanAdmin = () => {
   const [stats, setStats] = useState({ totalPerputaran: 0, totalPembeli: 0, totalPenjual: 0, totalPesanan: 0 });
@@ -23,8 +24,8 @@ const LaporanAdmin = () => {
       const headers = { Authorization: `Bearer ${token}` };
 
       const [resLaporan, resUsers] = await Promise.all([
-        axios.get('http://localhost:5000/api/admin/laporan', { headers }),
-        axios.get('http://localhost:5000/api/admin/users', { headers }),
+        axios.get(`${API_URL}/api/admin/laporan`, { headers }),
+        axios.get(`${API_URL}/api/admin/users`, { headers }),
       ]);
 
       const pesananSukses = resLaporan.data.filter(item => item.status === 'selesai');

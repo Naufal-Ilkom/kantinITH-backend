@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './TransaksiAdmin.css';
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+
 
 const TransaksiAdmin = () => {
   const [viewTab, setViewTab] = useState('permintaan');
@@ -22,9 +24,9 @@ const TransaksiAdmin = () => {
   const fetchAllData = async () => {
     try {
       setLoading(true);
-      const resLaporan = await axios.get('http://localhost:5000/api/admin/laporan', config);
+      const resLaporan = await axios.get(`${API_URL}/api/admin/laporan`, config);
       setSemuaTransaksi(resLaporan.data || []);
-      const resTopup = await axios.get('http://localhost:5000/api/topup-requests', config);
+      const resTopup = await axios.get(`${API_URL}/api/topup-requests`, config);
       setPermintaanDana(resTopup.data || []);
       setLoading(false);
     } catch (err) {
@@ -37,7 +39,7 @@ const TransaksiAdmin = () => {
   const handleAccDana = async (id) => {
     if (!window.confirm("Setujui permintaan dana ini?")) return;
     try {
-      await axios.patch(`http://localhost:5000/api/topup-approve/${id}`, { catatan_admin: 'Disetujui oleh admin' }, config);
+      await axios.patch(`${API_URL}/api/topup-approve/${id}`, { catatan_admin: 'Disetujui oleh admin' }, config);
       alert('Permintaan berhasil disetujui!');
       fetchAllData();
     } catch { alert('Gagal menyetujui permintaan'); }
@@ -46,7 +48,7 @@ const TransaksiAdmin = () => {
   const handleTolakDana = async (id) => {
     if (!window.confirm("Tolak permintaan dana ini?")) return;
     try {
-      await axios.patch(`http://localhost:5000/api/topup-reject/${id}`, { catatan_admin: 'Ditolak oleh admin' }, config);
+      await axios.patch(`${API_URL}/api/topup-reject/${id}`, { catatan_admin: 'Ditolak oleh admin' }, config);
       alert('Permintaan berhasil ditolak!');
       fetchAllData();
     } catch { alert('Gagal menolak permintaan'); }
